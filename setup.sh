@@ -49,12 +49,12 @@ done
 
 function update_package_manager() {
 
-    if [[ $OS="macos" ]]; then
+    if [[ $OS=="macos" ]]; then
         # install brew
         if [[ $(where brew | wc -l) -lt 1 ]]; then
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" > /dev/null 2>&1
         fi
-    elif [[ $OS="linux" ]]; then 
+    elif [[ $OS=="linux" ]]; then 
         # update packages
         sudo kill -9 $(ps aux | grep unattended-upgr | awk {'print $2'}) > /dev/null 2>&1 
         sudo apt-get update > /dev/null 2>&1 
@@ -67,21 +67,21 @@ function update_package_manager() {
 function install_dependencies() {
 
     # install
-    if [[ $OS="macos" ]]; then
+    if [[ $OS=="macos" ]]; then
         brew install curl wget > /dev/null 2>&1 
-    elif [[ $OS="linux" ]]; then
+    elif [[ $OS=="linux" ]]; then
         sudo apt-get install -y curl wget ca-certificates apt-transport-https > /dev/null 2>&1 
     fi
 }
 
 function install_kubectl() {
-    if [[ $OS="macos" ]]; then
+    if [[ $OS=="macos" ]]; then
         brew install kubectl 
 
         if [[ $(where kubectl | wc -l) -lt 1 ]]; then
             echo "--- kubectl not installed"; exit
         fi
-    elif [[ $OS="linux" ]]; then
+    elif [[ $OS=="linux" ]]; then
         if [[ ! -f ~/.ssh/id_rsa || ! -f ~/.ssh/id_rsa.pub  ]]; then
             ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y >/dev/null 2>&1
         fi
@@ -98,13 +98,13 @@ function install_kubectl() {
 }
 
 function install_kubeadm() {
-    if [[ $OS="macos" ]]; then
+    if [[ $OS=="macos" ]]; then
         brew install kubeadm
         if [[ $(where kubeadm | wc -l) -lt 1 ]]; then
             echo "--- kubeadm not installed"; exit;
         fi
 
-    elif [[ $OS="linux" ]]; then
+    elif [[ $OS=="linux" ]]; then
         apt-get install -y kubeadm
         if [[ ! -x kubeadm ]]; then
             echo "--- kubeadm not installed"; exit;
@@ -115,7 +115,7 @@ function install_kubeadm() {
 
 function configure_local_environment() {
    
-    if [[ $OS="macos" ]]; then
+    if [[ $OS=="macos" ]]; then
         # setup for zsh
         if [[ ! -f ~/.zshrc ]]; then 
             echo >> ~/.zshrc
@@ -134,7 +134,7 @@ function configure_local_environment() {
         source <(kubectl completion bash);
         source <(kubectl completion zsh);
 
-    elif [[ $OS="linux" ]]; then
+    elif [[ $OS=="linux" ]]; then
         # setup for bash
         kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
         source <(kubectl completion bash);
