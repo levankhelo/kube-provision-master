@@ -101,13 +101,13 @@ function install_kubeadm() {
     if [[ $OS="macos" ]]; then
         brew install kubeadm
         if [[ $(where kubeadm | wc -l) -lt 1 ]]; then
-            echo "--- kubeadm not installed"; exit
+            echo "--- kubeadm not installed"; exit;
         fi
 
     elif [[ $OS="linux" ]]; then
         apt-get install -y kubeadm
         if [[ ! -x kubeadm ]]; then
-            echo "--- kubeadm not installed"; exit
+            echo "--- kubeadm not installed"; exit;
         fi
     fi
     echo "+++ kubeadm installed";
@@ -120,24 +120,24 @@ function configure_local_environment() {
         if [[ ! -f ~/.zshrc ]]; then 
             echo >> ~/.zshrc
         if [[ $(cat ~/.zshrc | grep "source <(kubectl completion zsh)" | wc -l) -lt 1 ]]; then
-            echo "source <(kubectl completion zsh)" >> ~/.zshrc
+            echo "source <(kubectl completion zsh)" >> ~/.zshrc;
         fi
 
         # setup for bash
         brew install bash
         brew install bash-completion@2
         if [[ $(cat ~/.bash_profile | grep "source <(kubectl completion bash)" | wc -l) -lt 1 ]]; then
-            echo 'source <(kubectl completion bash)' >>~/.bash_profile
+            echo 'source <(kubectl completion bash)' >>~/.bash_profile;
         fi
-        kubectl completion bash >/usr/local/etc/bash_completion.d/kubectl
+        kubectl completion bash >/usr/local/etc/bash_completion.d/kubectl;
 
-        source <(kubectl completion bash)
-        source <(kubectl completion zsh)
+        source <(kubectl completion bash);
+        source <(kubectl completion zsh);
 
     elif [[ $OS="linux" ]]; then
         # setup for bash
         kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl > /dev/null
-        source <(kubectl completion bash)
+        source <(kubectl completion bash);
     fi
 
 }
